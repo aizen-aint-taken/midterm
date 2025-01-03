@@ -100,56 +100,12 @@
   <!-- /.sidebar -->
 </aside>
 
-<!-- Custom Styling -->
-<style>
-  /* Ensure sidebar styles are applied correctly */
-  .main-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 250px;
-    background-color: #f4f6f9;
-    transition: all 0.3s ease;
-  }
 
-  .sidebar-open .main-sidebar {
-    transform: translateX(0);
-  }
+<!-- Sidebar Toggle Button (for Mobile) -->
+<button class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+  <i class="fas fa-bars"></i>
+</button>
 
-  .main-sidebar.active {
-    transform: translateX(-250px);
-  }
+<link rel="stylesheet" href="../public/assets/css/sidebar.css">
+<script src="../public/assets/js/sidebar.js"></script>
 
-  .sidebar .nav-link {
-    color: #333;
-  }
-
-  .sidebar .nav-link.active {
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 4px;
-  }
-
-  .sidebar-divider {
-    border-top: 1px solid #dee2e6;
-  }
-</style>
-
-<!-- Sidebar Toggle Script -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const sidebar = document.querySelector('.main-sidebar');
-    const body = document.body;
-
-    const toggleSidebar = () => {
-      sidebar.classList.toggle('active');
-      body.classList.toggle('sidebar-open');
-    };
-
-    const toggleButton = document.querySelector('.navbar .nav-link[data-widget="pushmenu"]');
-    if (toggleButton) {
-      toggleButton.addEventListener('click', toggleSidebar);
-    }
-  });
-</script>

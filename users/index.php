@@ -9,7 +9,6 @@ include("../config/conn.php");
 $books = $conn->query("SELECT * FROM books WHERE Stock > 0");
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,11 +23,12 @@ $books = $conn->query("SELECT * FROM books WHERE Stock > 0");
 </head>
 
 <body>
-<div class="container mt-5">
+    <div class="container mt-5">
         <!-- Search Bar -->
         <div class="d-flex justify-content-center my-3">
             <div class="input-group w-50">
-                <input type="search" data-name="books" id="Search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <input type="search" data-name="books" id="Search" class="form-control rounded" placeholder="Search"
+                    aria-label="Search" aria-describedby="search-addon" />
                 <button type="button" class="btn btn-outline-primary">Search</button>
             </div>
         </div>
@@ -60,8 +60,8 @@ $books = $conn->query("SELECT * FROM books WHERE Stock > 0");
                         <td><?= htmlspecialchars($book['Language']) ?></td>
                         <td><?= htmlspecialchars($book['Stock']) ?></td>
                         <td>
-                            <button class="btn btn-primary btn-sm reserve-btn" data-toggle="modal" data-target="#reserveBookModal"
-                                data-id="<?= htmlspecialchars($book['BookID']) ?>"
+                            <button class="btn btn-primary btn-sm reserve-btn" data-toggle="modal"
+                                data-target="#reserveBookModal" data-id="<?= htmlspecialchars($book['BookID']) ?>"
                                 data-title="<?= htmlspecialchars($book['Title']) ?>"
                                 data-author="<?= htmlspecialchars($book['Author']) ?>">Reserve</button>
                         </td>
@@ -84,47 +84,74 @@ $books = $conn->query("SELECT * FROM books WHERE Stock > 0");
                             <strong>Language:</strong> <?= htmlspecialchars($book['Language']) ?><br>
                             <strong>Stock:</strong> <?= htmlspecialchars($book['Stock']) ?>
                         </p>
-                        <button class="btn btn-primary btn-sm reserve-btn" data-toggle="modal" data-target="#reserveBookModal"
-                            data-id="<?= htmlspecialchars($book['BookID']) ?>"
+                        <button class="btn btn-primary btn-sm reserve-btn" data-toggle="modal"
+                            data-target="#reserveBookModal" data-id="<?= htmlspecialchars($book['BookID']) ?>"
                             data-title="<?= htmlspecialchars($book['Title']) ?>"
                             data-author="<?= htmlspecialchars($book['Author']) ?>">Reserve</button>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
-    </div>
 
-    <!-- Reserve Book Modal -->
-    <div class="modal fade" id="reserveBookModal" tabindex="-1" aria-labelledby="reserveBookModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reserveBookModalLabel">Reserve Book</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <!-- Reserve Book Modal -->
+        <div class="modal fade" id="reserveBookModal" tabindex="-1" aria-labelledby="reserveBookModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reserveBookModalLabel">Reserve Book</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="../BooksCrud/Reserve.php" method="POST">
+                            <input type="hidden" name="book_id" id="reserveBookId">
+                            <div class="form-group">
+                                <label for="reserveBookTitle">Book Title</label>
+                                <input type="text" class="form-control" id="reserveBookTitle" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="reserveBookAuthor">Author</label>
+                                <input type="text" class="form-control" id="reserveBookAuthor" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentName">Your Name</label>
+                                <input type="text" class="form-control" name="student_name" id="studentName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentId">Student ID</label>
+                                <input type="text" class="form-control" name="student_id" id="studentId" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Reserve</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form action="../BooksCrud/Reserve.php" method="POST">
-                        <input type="hidden" name="book_id" id="reserveBookId">
-                        <div class="form-group">
-                            <label for="reserveBookTitle">Book Title</label>
-                            <input type="text" class="form-control" id="reserveBookTitle" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="reserveBookAuthor">Author</label>
-                            <input type="text" class="form-control" id="reserveBookAuthor" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="studentName">Your Name</label>
-                            <input type="text" class="form-control" name="student_name" id="studentName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="studentId">Student ID</label>
-                            <input type="text" class="form-control" name="student_id" id="studentId" required>
-                        </div>
-                        <button type="submit" class="btn btn-success">Reserve</button>
-                    </form>
+            </div>
+        </div>
+
+        <!-- Logout Button -->
+        <div class="text-center">
+            <a href="#" id="logout" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a href="../logout.php" class="btn btn-danger">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,7 +172,6 @@ $books = $conn->query("SELECT * FROM books WHERE Stock > 0");
             $('#reserveBookAuthor').val(bookAuthor);
         });
     </script>
-    <a href="../logout.php">Logout</a>
 </body>
 
 </html>

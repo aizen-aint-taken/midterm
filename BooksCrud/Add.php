@@ -2,7 +2,7 @@
 include  "../config/conn.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['author'], $_POST['publisher'], $_POST['genre'], $_POST['published_date'], $_POST['language'], $_POST['stock'])) {
-    // Trim and validate inputs
+
     $title = trim($_POST['title']);
     $author = trim($_POST['author']);
     $publisher = trim($_POST['publisher']);
@@ -11,18 +11,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['auth
     $language = trim($_POST['language']);
     $stock = (int)$_POST['stock'];
 
-    // Validate required fields
+    
     if (empty($title) || empty($author) || empty($publisher) || empty($genre) || empty($published_date) || empty($language) || $stock < 0) {
         die("Invalid input! Please ensure all fields are filled correctly.");
     }
 
     try {
-        // Insert the new record
+      
         $sql = "INSERT INTO books (Title, Author, Publisher, Genre, PublishedDate, Language, Stock) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
 
         if ($stmt->execute([$title, $author, $publisher, $genre, $published_date, $language, $stock])) {
-            // Reorder BookIDs
+        
             $conn->query("SET @new_id = 0;");
             $conn->query("
                 UPDATE books
@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['auth
                 ORDER BY BookID;
             ");
 
-            // Redirect on success
             header('Location: ../admin/index.php');
             exit;
         } else {

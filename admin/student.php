@@ -1,6 +1,4 @@
 <?php
-
-// hi
 session_start();
 
 require_once '../config/conn.php';
@@ -10,19 +8,16 @@ if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     exit;
 }
 
-
-
 if ($_POST) {
-
     $email_result = $conn->query("select * from webuser");
 
-    $name = mysqli_real_escape_string( $conn , $_POST["name"]);
-    $age = mysqli_real_escape_string($conn,$_POST['age']);
-    $year = mysqli_real_escape_string($conn , $_POST['year']);
-    $sect = mysqli_real_escape_string($conn , $_POST['sect']);
-    $email = filter_var( $_POST['mail'] ,  FILTER_VALIDATE_EMAIL);
+    $name = mysqli_real_escape_string($conn, $_POST["name"]);
+    $age = mysqli_real_escape_string($conn, $_POST['age']);
+    $year = mysqli_real_escape_string($conn, $_POST['year']);
+    $sect = mysqli_real_escape_string($conn, $_POST['sect']);
+    $email = filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL);
     $pass = $_POST['password'];
-    $hasspass = password_hash($pass,PASSWORD_BCRYPT);
+    $hasspass = password_hash($pass, PASSWORD_BCRYPT);
 
     $email_result = $conn->query("select * from webuser where email='$email';");
     if ($email_result->num_rows == 1) {
@@ -33,35 +28,19 @@ if ($_POST) {
 
         $_SESSION['user'] = $email;
         $_SESSION['usertype'] = "u";
-        // $_SESSION['username'] = $fname;
-
-        // echo "INSERT INTO patient(pemail, pname, ppassword, paddress, pdob, ptel) VALUES ('$email','$name','$npassword','$address','$dob','$mnumber')";
 
         $success =  "Account Successfully Created";
     }
 }
 
-
-
-
-
 $users = $conn->query("SELECT * FROM `users`");
-
-
-
-
-
-
-
 
 include('../includes/header.php');
 include('../includes/sidebar.php');
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,46 +48,58 @@ include('../includes/sidebar.php');
     <meta name="author" content="Ely Gian Ga">
     <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../public/assets/css/admin_index.css">
+    <link rel="stylesheet" href="/public/assets/css/admin_index.css">
     <title>Add Student</title>
 </head>
-
 <body>
     <div class="container mt-5">
-        <div class=" d-flex justify-content-end mb-3">
+        <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Student</button>
         </div>
 
+        <!-- Success message -->
+        <?php if (isset($success)): ?>
+            <div class="alert alert-success"><?= $success ?></div>
+        <?php endif; ?>
 
+        <!-- Error message -->
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger"><?= $error ?></div>
+        <?php endif; ?>
 
-        <!-- Table POV dako na screeen -->
-        <table class="table table-striped text-center">
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Age</th>
-                    <th>Year Level</th>
-                    <th>Section</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($users as $user): ?>
+        <!-- Table View -->
+        <div class="table-responsive">
+            <table class="table table-striped text-center">
+                <thead>
                     <tr>
-                        <td><?= $user['name'] ?></td>
-                        <td><?= $user['age'] ?></td>
-                        <td><?= $user['year'] ?></td>
-                        <td><?= $user['sect'] ?></td>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Year Level</th>
+                        <th>Section</th>
+                        <th>Action</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($user['name']) ?></td>
+                            <td><?= htmlspecialchars($user['age']) ?></td>
+                            <td><?= htmlspecialchars($user['year']) ?></td>
+                            <td><?= htmlspecialchars($user['sect']) ?></td>
+                            <td>
+                                <!-- Delete button -->
+                                <form action="../admin/deleteStudent.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="delete_id" value="<?= $user['id'] ?>">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this student?');">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-
-
-
-
-        <!-- Modals -->
-        <!-- Add Book Modal -->
+        <!-- Add Student Modal -->
         <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -119,7 +110,7 @@ include('../includes/sidebar.php');
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST">
+                        <form action="../admin/student.php" method="POST">
                             <div class="form-group">
                                 <label for="name">Full Name</label>
                                 <input type="text" class="form-control" name="name" id="name" placeholder="Juan Dela Cruz" required>
@@ -150,11 +141,9 @@ include('../includes/sidebar.php');
                 </div>
             </div>
         </div>
-
     </div>
 
     <?php include('../includes/footer.php'); ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

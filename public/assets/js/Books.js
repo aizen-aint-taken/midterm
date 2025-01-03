@@ -31,3 +31,37 @@ document.querySelectorAll('.delete-btn').forEach(button => {
         document.getElementById('deleteBookId').value = bookId;
     });
 });
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById("Search");
+        console.log(searchInput);
+        const tableRows = document.querySelectorAll("table tbody tr");
+        
+        searchInput.addEventListener("input", function() {
+            const searchQuery = searchInput.value.toLowerCase();
+            
+            tableRows.forEach(row => {
+                const titleCell = row.cells[1].textContent.toLowerCase(); 
+                
+               
+                if (titleCell.includes(searchQuery)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+
+        
+        searchInput.addEventListener("focus", function() {
+            if (searchInput.value === "") {
+                tableRows.forEach(row => {
+                    row.style.display = "";
+                });
+            }
+        });
+    });
+
+
