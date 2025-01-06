@@ -13,6 +13,7 @@ $books = $conn->query("SELECT * FROM books");
     <meta name="description" content="System">
     <title>Book Inventory</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/assets/css/inputFile.css">
     <style>
         .card-container {
             display: none;
@@ -32,6 +33,11 @@ $books = $conn->query("SELECT * FROM books");
 
 <body>
     <div class="container mt-5">
+        <!-- import excel file -->
+        <div class=" d-flex justify-content w-50"><br>
+            <label for="customFile" class="form-label">Put an Excel File</label><br>
+            <input type="file" class="form-control" id="customFile" placeholder="put an excel file">
+        </div>
         <!-- Add Book Button -->
         <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Book</button>
@@ -39,7 +45,7 @@ $books = $conn->query("SELECT * FROM books");
 
         <!-- Search Bar -->
         <div class="d-flex justify-content-center my-3">
-            <div class="input-group w-50">
+            <div class="input-group w-sm-50">
                 <input type="search" data-name="books" id="Search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                 <button type="button" class="btn btn-outline-primary">Search</button>
             </div>
@@ -80,7 +86,7 @@ $books = $conn->query("SELECT * FROM books");
                                 data-genre="<?= htmlspecialchars($book['Genre']) ?>"
                                 data-published="<?= htmlspecialchars($book['PublishedDate']) ?>"
                                 data-language="<?= htmlspecialchars($book['Language']) ?>"
-                                data-stock="<?= htmlspecialchars($book['Stock']) ?>">Edit</button>
+                                data-stock="<?= htmlspecialchars($book['Stock']) ?>">Edit</button><br>
                             <button class="btn btn-danger btn-sm delete-btn" data-id="<?= htmlspecialchars($book['BookID']) ?>"
                                 data-toggle="modal" data-target="#deleteBookModal">Delete</button>
                         </td>
@@ -246,6 +252,7 @@ $books = $conn->query("SELECT * FROM books");
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../public/assets/js/Books.js"></script>
+    <script src="../public/assets/js/inputFile.js"></script>
 </body>
 
 </html>

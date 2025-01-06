@@ -39,7 +39,7 @@ include('../includes/sidebar.php');
     <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../public/assets/css/admin_index.css">
-    <title>LYR Inventory</title>
+    <title>Library Inventory</title>
 </head>
 
 <body>

@@ -1,5 +1,5 @@
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-light elevation-4">
+<aside class="main-sidebar sidebar-light elevation-5">
   <!-- Brand Logo -->
   <a href="index.php" class="brand-link text-center py-3">
     <span class="brand-text font-weight-bold text-primary">Inventory Dashboard</span>
@@ -100,6 +100,37 @@
   <!-- /.sidebar -->
 </aside>
 
+<style>
+  /* Sidebar */
+.main-sidebar {
+    width: 250px; /* Adjust width as needed */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1000;
+    background-color: #f8f9fa; /* Light background */
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    margin-left: 250px; /* Same as the sidebar width */
+    padding: 20px; /* Add some padding for better appearance */
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    .main-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .content-wrapper {
+        margin-left: 0;
+    }
+}
+
+</style>
 
 <!-- Sidebar Toggle Button (for Mobile) -->
 <button class="sidebar-toggle-btn" aria-label="Toggle Sidebar">

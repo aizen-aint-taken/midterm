@@ -52,7 +52,7 @@ include('../includes/sidebar.php');
     <title>Add Student</title>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 w-50" >
         <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Student</button>
         </div>
@@ -68,8 +68,8 @@ include('../includes/sidebar.php');
         <?php endif; ?>
 
         <!-- Table View -->
-        <div class="table-responsive">
-            <table class="table table-striped text-center">
+        <div class="table-responsive w-100">
+            <table class="table table-striped text-center ">
                 <thead>
                     <tr>
                         <th>Full Name</th>
@@ -141,9 +141,8 @@ include('../includes/sidebar.php');
                 </div>
             </div>
         </div>
+        <?php include('../includes/footer.php'); ?>
     </div>
-
-    <?php include('../includes/footer.php'); ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
