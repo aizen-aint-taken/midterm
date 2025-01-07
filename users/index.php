@@ -171,6 +171,15 @@ $books = $conn->query("SELECT * FROM books WHERE Stock > 0");
             $('#reserveBookTitle').val(bookTitle);
             $('#reserveBookAuthor').val(bookAuthor);
         });
+
+
+        $('#Search').on('keyup', function () {
+            const query = $(this).val().toLowerCase();
+            $('table tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(query) > -1);
+            });
+        });
+
     </script>
 </body>
 
