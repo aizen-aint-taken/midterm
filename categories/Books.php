@@ -253,6 +253,6 @@ $books = $conn->query("SELECT * FROM books");
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../public/assets/js/Books.js"></script>
     <script src="../public/assets/js/inputFile.js"></script>
+    <script src="../public/assets/js/excel.js"></script>
 </body>
-
 </html>
