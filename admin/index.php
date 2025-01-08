@@ -65,11 +65,11 @@ include('../includes/sidebar.php');
                             <i class="fas fa-atom"></i> Science
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">
                             <i class="fas fa-history"></i> History
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
 
                 <!-- Tab Content -->
