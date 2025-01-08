@@ -4,7 +4,7 @@ $name = "Ely Gian Ga";
 echo "MQTT Admin Panel by $name\n";
 
 return [
-    'host' => 'AMBOT LANG', 
+    'host' => 'http://localhost/library_inventory/admin/index.php', 
     'port' => 1883, 
     'username' => 'root',
     'password' => '', 
