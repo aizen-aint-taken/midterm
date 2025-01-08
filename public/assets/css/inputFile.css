@@ -29,3 +29,54 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
+.custom-file-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.custom-file-input:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.upload-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #218838;
+}
+
+.upload-btn:focus {
+    outline: none;
+}
+
+#upload-status {
+    font-size: 16px;
+    color: #007bff;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .custom-file-input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .upload-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

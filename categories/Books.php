@@ -33,11 +33,21 @@ $books = $conn->query("SELECT * FROM books");
 
 <body>
     <div class="container mt-5">
-        <!-- import excel file -->
-        <div class=" d-flex justify-content w-50"><br>
-            <label for="customFile" class="form-label">Put an Excel File</label><br>
-            <input type="file" class="form-control" id="customFile" placeholder="put an excel file">
+       <!-- import excel file -->
+        <div class="d-flex justify-content-center w-50 mb-3">
+            <label for="customFile" class="form-label">Upload Excel File</label><br>
+            <!-- Hide the default file input button, and create a custom button -->
+            <div class="custom-file-container">
+                <input type="file" class="form-control custom-file-input" id="customFile" name="excelFile" accept=".xls, .xlsx" required>
+                <button type="button" class="btn btn-primary custom-file-btn" onclick="uploadFile()">Choose File</button>
+            </div>
+            <div class="mt-2 text-center">
+                <button class="btn btn-success upload-btn" onclick="uploadFile()">Upload</button>
+            </div>
+            <div id="upload-status" class="mt-2 text-center"></div>
         </div>
+
+
         <!-- Add Book Button -->
         <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Book</button>
