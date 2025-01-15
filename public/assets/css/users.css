@@ -1,286 +1,304 @@
-/* Global Styles */
+
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7fa;
-    color: #333;
+font-family: 'Arial', sans-serif;
+background-color: #f8f9fa;
+color: #333;
 }
 
-/* Container */
 .container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+margin-top: 50px;
 }
 
-/* Search Bar */
-.input-group {
-    max-width: 500px;
-    margin: 0 auto 30px auto;
+.welcome-message {
+font-size: 1.25rem;
+font-weight: bold;
+color: #007bff;
+text-align: center;
+margin-bottom: 20px;
 }
 
-#Search {
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    padding-left: 20px;
-    font-size: 16px;
-}
-
-button.btn-outline-primary {
-    border-radius: 25px;
-    background-color: #007bff;
-    color: white;
-}
-
-/* Table View (Large screens) */
+/* Table Styles */
 table {
-    margin-top: 30px;
-    width: 100%;
-    border-collapse: collapse;
+width: 100%;
+margin: 20px 0;
+border-collapse: collapse;
 }
 
-table th, table td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
+th, td {
+padding: 12px;
+text-align: center;
 }
 
-table th {
-    background-color: #007bff;
-    color: white;
+th {
+background-color: #007bff;
+color: #fff;
 }
 
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+tr:nth-child(even) {
+background-color: #f2f2f2;
 }
 
-table td button {
-    background-color: #28a745;
-    border: none;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 5px;
-    cursor: pointer;
+tr:hover {
+background-color: #e6f7ff;
+cursor: pointer;
 }
 
-table td button:hover {
-    background-color: #218838;
+button {
+transition: background-color 0.3s ease;
 }
 
-/* Card View (Small Screens) */
+button:hover {
+background-color: #0056b3;
+}
+
+/* Filter Form */
+.filter-form {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.filter-form label {
+font-weight: bold;
+}
+
+.filter-form select, .filter-form button {
+padding: 10px;
+border-radius: 4px;
+border: 1px solid #ccc;
+}
+
+/* Card View */
 .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
+display: none; /* Hide cards by default */
+flex-wrap: wrap;
+gap: 20px;
+justify-content: center;
 }
 
 .card {
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+width: 18rem;
+border: 1px solid #ddd;
+border-radius: 8px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .card-body {
-    padding: 20px;
+padding: 15px;
 }
 
 .card-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #007bff;
+font-size: 1.2rem;
+font-weight: bold;
+color: #007bff;
 }
 
 .card-text {
-    font-size: 14px;
-    margin-bottom: 15px;
+font-size: 1rem;
+color: #555;
 }
 
 .card button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.card button:hover {
-    background-color: #218838;
+width: 100%;
+padding: 10px;
+margin-top: 10px;
+border-radius: 5px;
+background-color: #28a745;
+color: white;
+border: none;
 }
 
 /* Modal Styles */
 .modal-content {
-    border-radius: 10px;
+border-radius: 8px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
-    background-color: #007bff;
-    color: white;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+background-color: #007bff;
+color: white;
+border-top-left-radius: 8px;
+border-top-right-radius: 8px;
 }
 
-.modal-header .close {
-    color: white;
+.modal-title {
+font-size: 1.25rem;
+font-weight: bold;
 }
 
-.modal-body {
-    padding: 30px;
+.modal-body .form-group {
+margin-bottom: 15px;
 }
 
-.modal-body input {
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 15px;
-    padding: 10px;
-    width: 100%;
+.modal-body label {
+font-weight: bold;
 }
 
-button.btn-success {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+.modal-body input[type="text"] {
+width: 100%;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
 }
 
-button.btn-success:hover {
-    background-color: #218838;
+.modal-footer {
+justify-content: space-between;
 }
 
-button.close {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 30px;
-    opacity: 0.8;
+.modal-footer button {
+border-radius: 5px;
 }
 
-button.close:hover {
-    opacity: 1;
+/* Logout Link */
+.logout-link {
+font-size: 1rem;
+font-weight: bold;
+color: #dc3545;
+text-decoration: none;
+margin-top: 20px;
 }
 
-/* Footer and Logout */
-footer {
-    margin-top: 50px;
-    text-align: center;
-    font-size: 14px;
+.logout-link:hover {
+text-decoration: underline;
 }
 
-a.logout {
-    font-size: 16px;
-    text-decoration: none;
-    color: #007bff;
-}
-
-a.logout:hover {
-    text-decoration: underline;
-}
-
-@media (max-width: 767px) {
-    .container {
-        padding: 15px;
-    }
-
-    .input-group {
-        width: 100%;
-    }
-
-    table {
-        display: none;
-    }
-
-    .card-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/* Additional Styles for Responsiveness */
-@media (max-width: 991px) {
-    .input-group {
-        width: 90%;
-    }
-
-    table {
-        display: none;
-    }
-
-    .card-container {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 576px) {
-    .input-group {
-        width: 100%;
-    }
-
-    .card-container {
-        grid-template-columns: 1fr;
-    }
-
-    .card-title {
-        font-size: 16px;
-    }
-
-    .card-text {
-        font-size: 12px;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 6px 12px;
-    }
-}
-
-.card-container {
-    display: none;
-}
-
-@media (max-width: 991px) {
-    table {
-        display: none;
-    }
-
-    .card-container {
-        display: grid;
-    }
-}
-
-#logout {
-    display: inline-block;
-    margin: 20px 0;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    text-align: center;
-}
-
-a#logout:hover {
-    background-color: #0056b3;
-    text-decoration: none;
-}
-
-.card-container {
-    display: none;
-}
-
+/* Responsive Styles */
 @media (max-width: 768px) {
-    .table {
-        display: none;
-    }
-
-    .card-container {
-        display: block;
-    }
+.filter-form {
+    flex-direction: column;
+    gap: 10px;
 }
+
+/* Hide the table on mobile */
+table {
+    display: none;
+}
+
+/* Show the card view only on mobile */
+.card-container {
+    display: flex;
+}
+}
+
+#sidebar {
+    position: fixed; /* Fix the sidebar to the left */
+    top: 0;
+    left: 0;
+    height: 100%; /* Full height */
+    width: 350px; /* Sidebar width */
+    overflow-y: auto; /* Add scroll for content overflow */
+    z-index: 1030; /* Ensure it's above other elements */
+}
+
+  .table {
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        /* Header styling */
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+
+        /* Body styling */
+        .table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .table tbody td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        /* Pending status styling */
+        .table tbody td p {
+            margin: 0;
+            padding: 5px 10px;
+            display: inline-block;
+            border-radius: 5px;
+            background-color: #ffc107;
+            /* Yellow background for "Pending" */
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+
+          body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #0d6efd;
+            color: #fff;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+        }
+
+        .sidebar .nav-link {
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            transition: background-color 0.3s ease;
+            color: #fff;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: #0056b3;
+            border-radius: 5px;
+        }
+
+        .table {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+        }
+
+        .table thead {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .card-container .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .card .btn {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 1050;
+        }

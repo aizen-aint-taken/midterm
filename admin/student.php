@@ -17,13 +17,13 @@ if ($_POST) {
     $sect = mysqli_real_escape_string($conn, $_POST['sect']);
     $email = filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL);
     $pass = $_POST['password'];
-    $hasspass = password_hash($pass, PASSWORD_BCRYPT);
+    // $hasspass = password_hash($pass, PASSWORD_BCRYPT);
 
     $email_result = $conn->query("select * from webuser where email='$email';");
     if ($email_result->num_rows == 1) {
         $error = "Already have an account for this Email address.";
     } else {
-        $conn->query("INSERT INTO users(email, password, name, age, year, sect) VALUES ('$email','$hasspass','$name','$age','$year','$sect')");
+        $conn->query("INSERT INTO users(email, password, name, age, year, sect) VALUES ('$email','$pass','$name','$age','$year','$sect')");
         $conn->query("INSERT INTO webuser(email, usertype) VALUES ('$email','u')");
 
         $_SESSION['user'] = $email;
@@ -41,6 +41,7 @@ include('../includes/sidebar.php');
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,10 +52,11 @@ include('../includes/sidebar.php');
     <link rel="stylesheet" href="/public/assets/css/admin_index.css">
     <title>Add Student</title>
 </head>
+
 <body>
-    <div class="container mt-5 w-50" >
+    <div class="container mt-5 w-50">
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Student</button>
+            <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Students</button>
         </div>
 
         <!-- Success message -->
@@ -104,7 +106,7 @@ include('../includes/sidebar.php');
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addBookModalLabel">Add Student</h5>
+                        <h5 class="modal-title" id="addBookModalLabel">Add Students</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -113,23 +115,23 @@ include('../includes/sidebar.php');
                         <form action="../admin/student.php" method="POST">
                             <div class="form-group">
                                 <label for="name">Full Name</label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="Juan Dela Cruz" required>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Put Your Full Name" required>
                             </div>
                             <div class="form-group">
                                 <label for="age">Age</label>
-                                <input type="text" class="form-control" name="age" id="age" placeholder="17" required>
+                                <input type="text" class="form-control" name="age" id="age" placeholder="Put Your Age" required>
                             </div>
                             <div class="form-group">
                                 <label for="year">Year Level</label>
-                                <input type="text" class="form-control" name="year" id="year" placeholder="Grade 9" required>
+                                <input type="text" class="form-control" name="year" id="year" placeholder="Your Grade(7-12)" required>
                             </div>
                             <div class="form-group">
                                 <label for="sect">Section</label>
-                                <input type="text" class="form-control" name="sect" id="sect" placeholder="Section Maganda" required>
+                                <input type="text" class="form-control" name="sect" id="sect" placeholder="Your Section" required>
                             </div>
                             <div class="form-group">
                                 <label for="mail">Email</label>
-                                <input type="mail" class="form-control" name="mail" id="mail" placeholder="juandelacruz@gmail.com" required>
+                                <input type="mail" class="form-control" name="mail" id="mail" placeholder="Your Email" required>
                             </div>
                             <div class="form-group">
                                 <label for="pass">Password</label>
@@ -145,4 +147,5 @@ include('../includes/sidebar.php');
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -1,8 +1,5 @@
 <?php
 include "../config/conn.php";
-require '../vendor/autoload.php';
-
-use PhpMqtt\Client\MqttClient;
 
 // Validate input
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['author'], $_POST['publisher'], $_POST['genre'], $_POST['published_date'], $_POST['language'], $_POST['stock'])) {
@@ -32,27 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['auth
                 SET BookID = (@new_id := @new_id + 1)
                 ORDER BY BookID;
             ");
-
-            // MQTT Logic
-            $config = include('../config/mqtt.php');
-            $mqtt = new MqttClient($config['host'], $config['port'], $config['client_id']);
-
-            try {
-                $mqtt->connect($config['username'], $config['password']);
-
-                // Prepare MQTT message
-                $topic = 'books/inventory';
-                $message = json_encode([
-                    'action' => 'add',
-                    'title' => $title,
-                    'author' => $author,
-                ]);
-
-                $mqtt->publish($topic, $message, 0); // QoS 0
-                $mqtt->disconnect();
-            } catch (\PhpMqtt\Client\Exceptions\MqttClientException $e) {
-                error_log('MQTT Error: ' . $e->getMessage());
-            }
 
             // Redirect after successful operation
             header('Location: ../admin/index.php');

@@ -36,14 +36,21 @@ include('../includes/sidebar.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="UI PAGE">
     <meta name="author" content="Ely Gian Ga">
-    <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../public/assets/css/bootstrap.min.css">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="../public/assets/css/font-awesome.css">
     <link rel="stylesheet" href="../public/assets/css/admin_index.css">
     <title>Library Inventory</title>
 </head>
 
 <body>
     <div class="content-wrapper">
+
+        <div class="container">
+            <h2 class="text-center">Real-Time Book Reservation Notifications</h2>
+            <div id="notifications"></div>
+        </div>
+
 
         <!-- Main Content -->
         <section class="content">
@@ -52,24 +59,10 @@ include('../includes/sidebar.php');
                 <ul class="nav nav-tabs justify-content-center" id="dashboard-tabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="literature-tab" data-bs-toggle="tab" href="#literature" role="tab" aria-controls="literature" aria-selected="true">
-                            <i class="fas fa-book"></i> Literature
+                            <i class="fas fa-book"></i> Books
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="math-tab" data-bs-toggle="tab" href="#math" role="tab" aria-controls="math" aria-selected="false">
-                            <i class="fas fa-calculator"></i> Math
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="science-tab" data-bs-toggle="tab" href="#science" role="tab" aria-controls="science" aria-selected="false">
-                            <i class="fas fa-atom"></i> Science
-                        </a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">
-                            <i class="fas fa-history"></i> History
-                        </a>
-                    </li> -->
+
                 </ul>
 
                 <!-- Tab Content -->
@@ -78,40 +71,11 @@ include('../includes/sidebar.php');
                     <div class="tab-pane fade show active" id="literature" role="tabpanel" aria-labelledby="literature-tab">
                         <div class="card">
                             <div class="card-header">
-                                <i class="fas fa-book"></i> Literature
+                                <i class="fas fa-book text-center"></i>
                             </div>
                             <div class="card-body">
                                 <?php
                                 include("../categories/Books.php");
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Math Tab -->
-                    <div class="tab-pane fade" id="math" role="tabpanel" aria-labelledby="math-tab">
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="fas fa-calculator"></i> Math
-                            </div>
-                            <div class="card-body">
-                                <?php
-                                include("../categories/Math.php");
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Science Tab -->
-                    <div class="tab-pane fade" id="science" role="tabpanel" aria-labelledby="science-tab">
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="fas fa-atom"></i> Science
-                            </div>
-                            <div class="card-body">
-                                <?php
-
-                                include("../categories/Science.php");
-
                                 ?>
                             </div>
                         </div>
@@ -122,7 +86,29 @@ include('../includes/sidebar.php');
     </div>
 
     <?php include('../includes/footer.php'); ?>
+    <script src="../public/assets/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script>
+        const client = mqtt.connect('ws://broker.hivemq.com:8000/mqtt');
+        client.on('connect', () => {
+            console.log('Connected to MQTT broker');
+            client.subscribe('library/admin/notifications');
+        });
+
+        client.on('message', (topic, message) => {
+            if (topic === 'library/admin/notifications') {
+                const data = JSON.parse(message.toString());
+                const notification = `
+                    <div class="alert alert-info">
+                        <strong>New Reservation:</strong> ${data.title} by ${data.author}<br>
+                        Reserved by: ${data.name}
+                    </div>`;
+                document.getElementById('notifications').innerHTML += notification;
+            }
+        });
+    </script>
 </body>
 
 </html>

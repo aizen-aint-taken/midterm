@@ -20,16 +20,10 @@
         </li>
 
         <!-- Products -->
-        <li class="nav-item">
-          <a href="products.php" class="nav-link">
-            <i class="nav-icon fas fa-box"></i>
-            <p>Products</p>
-          </a>
-        </li>
 
         <!-- Divider -->
         <li class="nav-item">
-          <hr class="sidebar-divider my-3">
+          <hr class="sidebar-divider">
         </li>
 
         <!-- Analytics and Reports -->
@@ -39,44 +33,14 @@
             <p>Analytics</p>
           </a>
         </li>
+
         <li class="nav-item">
-          <a href="reports.php" class="nav-link">
-            <i class="nav-icon fas fa-file-alt"></i>
-            <p>Reports</p>
+          <a href="reservations.php" class="nav-link">
+            <i class="nav-icon fas fa-box"></i>
+            <p>Reservation</p>
           </a>
         </li>
 
-        <!-- Divider -->
-        <li class="nav-item">
-          <hr class="sidebar-divider my-3">
-        </li>
-
-        <!-- Messages -->
-        <li class="nav-item">
-          <a href="messages.php" class="nav-link">
-            <i class="nav-icon fas fa-envelope"></i>
-            <p>Messages</p>
-          </a>
-        </li>
-
-        <!-- Divider -->
-        <li class="nav-item">
-          <hr class="sidebar-divider my-3">
-        </li>
-
-        <!-- Support and Notifications -->
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-headset"></i>
-            <p>Support</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-bell"></i>
-            <p>Notifications</p>
-          </a>
-        </li>
 
         <!-- Add Student -->
         <li class="nav-item">
@@ -86,11 +50,22 @@
           </a>
         </li>
 
+        <!-- Divider -->
+        <li class="nav-item">
+          <hr class="sidebar-divider">
+        </li>
+
         <!-- Logout -->
         <li class="nav-item mt-3">
           <a href="../logout.php" class="nav-link text-danger">
             <i class="nav-icon fas fa-sign-out-alt"></i>
             <p>Logout</p>
+          </a>
+        </li>
+        <li class="nav-item mt-3">
+          <a href="javascript:(0)" class="nav-link text-danger">
+            <i class="fa-solid fa-clock"></i>
+            <p id="orasan" style="font-size: 1.5rem;"></p>
           </a>
         </li>
       </ul>
@@ -102,34 +77,46 @@
 
 <style>
   /* Sidebar */
-.main-sidebar {
-    width: 250px; /* Adjust width as needed */
+  .main-sidebar {
+    width: 250px;
+    /* Adjust width as needed */
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
     z-index: 1000;
-    background-color: #f8f9fa; /* Light background */
-}
+    background-color: #f8f9fa;
+    /* Light background */
+  }
 
-/* Content Wrapper */
-.content-wrapper {
-    margin-left: 250px; /* Same as the sidebar width */
-    padding: 20px; /* Add some padding for better appearance */
-}
+  /* Divider */
+  .sidebar-divider {
+    border-top: 1px solid #ddd;
+    /* Light grey border */
+    margin: 10px 0;
+    /* Spacing around the divider */
+  }
 
-/* Mobile View */
-@media (max-width: 768px) {
+  /* Content Wrapper */
+  .content-wrapper {
+    margin-left: 250px;
+    /* Same as the sidebar width */
+    padding: 20px;
+    /* Add some padding for better appearance */
+  }
+
+  /* Mobile View */
+  @media (max-width: 768px) {
     .main-sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
+      width: 100%;
+      height: auto;
+      position: relative;
     }
-    .content-wrapper {
-        margin-left: 0;
-    }
-}
 
+    .content-wrapper {
+      margin-left: 0;
+    }
+  }
 </style>
 
 <!-- Sidebar Toggle Button (for Mobile) -->
@@ -139,4 +126,22 @@
 
 <link rel="stylesheet" href="../public/assets/css/sidebar.css">
 <script src="../public/assets/js/sidebar.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const clockElement = document.getElementById('orasan');
 
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+
+    setInterval(updateClock, 1000);
+
+
+    updateClock();
+  });
+</script>

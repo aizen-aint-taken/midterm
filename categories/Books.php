@@ -1,7 +1,22 @@
 <?php
+// session_start();
+// var_dump($_SESSION);
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header('location: ../index.php');
+    exit;
+}
+
 include("../config/conn.php");
-$books = $conn->query("SELECT * FROM books");
+$books = $conn->query("SELECT * FROM books WHERE Stock > 0");
+$filterBooks = $conn->query("SELECT * FROM `books` GROUP BY Language"); // to check if the query is correct
+if (isset($_POST['filter'])) {
+    $booksFilter = $_POST['booksFilter'];
+    $books = $conn->query("SELECT * FROM books WHERE Language = '$booksFilter' AND Stock > 0");
+}
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +27,7 @@ $books = $conn->query("SELECT * FROM books");
     <meta name="author" content="Ely Gian Ga">
     <meta name="description" content="System">
     <title>Book Inventory</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../public/assets/css/inputFile.css">
     <style>
         .card-container {
@@ -28,28 +43,102 @@ $books = $conn->query("SELECT * FROM books");
                 display: block;
             }
         }
+
+        .book {
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+
+        .filter {
+            font-size: 15px;
+            font-weight: normal;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-       <!-- import excel file -->
-        <div class="d-flex justify-content-center w-50 mb-3">
-            <label for="customFile" class="form-label">Upload Excel File</label><br>
-            <!-- Hide the default file input button, and create a custom button -->
-            <div class="custom-file-container">
-                <input type="file" class="form-control custom-file-input" id="customFile" name="excelFile" accept=".xls, .xlsx" required>
-                <button type="button" class="btn btn-primary custom-file-btn" onclick="uploadFile()">Choose File</button>
+    <div class="container">
+
+        <div class="message-holder">
+            <?php if (isset($_SESSION['exists']) && !empty($_SESSION['exists'])) : ?>
+                <div class="alert alert-danger">
+                    <span class="close-btn" onclick="this.parentElement.style.display='none';" style="cursor:pointer;">&times;</span>
+                    <div class="handler-message">
+                        <div style='color: red;'>
+                            <h2>Record Already Exists</h2>
+                            <h2>If existed you can just edit </h2>
+                            <?php foreach ($_SESSION['exists'] as $message) : ?>
+                                <p><?= $message ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php unset($_SESSION['exists']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success']) && !empty($_SESSION['success'])) : ?>
+                <div class="alert alert-success">
+                    <span class="close-btn" onclick="this.parentElement.style.display='none';" style="cursor:pointer;">&times;</span>
+                    <div class=" handler-message-success">
+                        <div style='color: green;'>
+                            <h2>Successfully Imported</h2>
+                            <?php foreach ($_SESSION['success'] as $message) : ?>
+                                <p><?= $message ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['error']) && !empty($_SESSION['error'])) : ?>
+                <div class="alert alert-danger">
+                    <span class="close-btn" onclick="this.parentElement.style.display='none';" style="cursor:pointer;">&times;</span>
+                    <div class="">
+                        <div style='color: red;'>
+                            <p><?= $_SESSION['error'] ?></p>
+                        </div>
+                    </div>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+        </div>
+
+        <div class="row align-items-center">
+            <!-- Filter by Subject -->
+            <div class="col-md-6">
+                <form action="index.php" method="post" class="filter-form" id="filterForm">
+                    <div class="form-group">
+                        <label for="booksFilter" class="filter">Filter By Subject:</label>
+                        <select name="booksFilter" id="booksFilter" class="form-control">
+                            <option selected disabled hidden>Select Subject</option>
+                            <?php foreach ($filterBooks as $subject): ?>
+                                <option value="<?= htmlspecialchars($subject['Language']) ?>">
+                                    <?= htmlspecialchars($subject['Language']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <button type="submit" name="filter" class="btn btn-primary mt-2">Select</button>
+                </form>
             </div>
-            <div class="mt-2 text-center">
-                <button class="btn btn-success upload-btn" onclick="uploadFile()">Upload</button>
+
+            <!-- Excel Import -->
+            <div class="col-md-6">
+                <form action="import-excel.php" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+                    <div class="form-group me-2">
+                        <label for="book" class="book">Upload Excel File</label>
+                        <input type="file" name="books" id="book" accept=".xls, .xlsx" class="form-control">
+                    </div>
+                    <button type="submit" name="import" class="btn btn-primary">Import Books</button>
+                </form>
             </div>
-            <div id="upload-status" class="mt-2 text-center"></div>
         </div>
 
 
+
+
         <!-- Add Book Button -->
-        <div class="d-flex justify-content-end mb-3">
+        <div class="d-flex justify-content-end mb-4">
             <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Book</button>
         </div>
 
@@ -71,7 +160,7 @@ $books = $conn->query("SELECT * FROM books");
                     <th>Publisher</th>
                     <th>Genre</th>
                     <th>Published Date</th>
-                    <th>Language</th>
+                    <th>Subject</th>
                     <th>Stock</th>
                     <th>Actions</th>
                 </tr>
@@ -116,7 +205,7 @@ $books = $conn->query("SELECT * FROM books");
                             <strong>Publisher:</strong> <?= htmlspecialchars($book['Publisher']) ?><br>
                             <strong>Genre:</strong> <?= htmlspecialchars($book['Genre']) ?><br>
                             <strong>Published Date:</strong> <?= htmlspecialchars($book['PublishedDate']) ?><br>
-                            <strong>Language:</strong> <?= htmlspecialchars($book['Language']) ?><br>
+                            <strong>Subject:</strong> <?= htmlspecialchars($book['Language']) ?><br>
                             <strong>Stock:</strong> <?= htmlspecialchars($book['Stock']) ?>
                         </p>
                         <div class="d-flex justify-content-between">
@@ -137,8 +226,6 @@ $books = $conn->query("SELECT * FROM books");
             <?php endforeach; ?>
         </div>
     </div>
-
-    <!-- Modals -->
     <!-- Add Book Modal -->
     <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -172,7 +259,7 @@ $books = $conn->query("SELECT * FROM books");
                             <input type="date" class="form-control" name="published_date" id="addBookPublishedDate" required>
                         </div>
                         <div class="form-group">
-                            <label for="addBookLanguage">Language</label>
+                            <label for="addBookLanguage">Subject</label>
                             <input type="text" class="form-control" name="language" id="addBookLanguage" required>
                         </div>
                         <div class="form-group">
@@ -264,5 +351,16 @@ $books = $conn->query("SELECT * FROM books");
     <script src="../public/assets/js/Books.js"></script>
     <script src="../public/assets/js/inputFile.js"></script>
     <script src="../public/assets/js/excel.js"></script>
+    </div>
+    <script>
+        document.getElementById('filterForm').addEventListener('submit', function(event) {
+            var select = document.getElementById('booksFilter');
+            if (select.value === 'Select Subject' || select.value === '') {
+                event.preventDefault(); // Prevent form submission
+                alert('Please select a subject.');
+            }
+        });
+    </script>
 </body>
+
 </html>

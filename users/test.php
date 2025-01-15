@@ -2,4 +2,3 @@
 $jems = "is gae";
 
 echo $jems;
-?>

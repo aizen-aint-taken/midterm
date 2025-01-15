@@ -1,0 +1,68 @@
+.table {
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+    font-size: 0.9rem; /* Smaller font size */
+    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #007bff;
+    color: white;
+    padding: 8px; /* Reduced padding */
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 2px solid #0056b3;
+}
+
+.table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Smaller shadow */
+}
+
+.table tbody td {
+    padding: 8px 10px; /* Reduced padding */
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9rem; /* Smaller font size */
+    color: #495057;
+}
+
+.table tbody td p {
+    margin: 0;
+    padding: 4px 8px; /* Reduced padding */
+    display: inline-block;
+    border-radius: 20px;
+    font-size: 0.8rem; /* Smaller font size for status */
+    font-weight: bold;
+}
+
+.table tbody td p.pending {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.table tbody td p.reserved {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.table tbody td p.not-returned {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.table tbody td p.unknown {
+    background-color: #6c757d;
+    color: #fff;
+}

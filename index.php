@@ -5,10 +5,12 @@ require_once 'config/conn.php';
 
 $_SESSION["user"] = "";
 $_SESSION["usertype"] = "";
+$_SESSION['student_id'] = "";
+$_SESSION['username'] = "";
 
 if ($_POST) {
 
-    $usermail = mysqli_escape_string($conn,$_POST['email']);
+    $usermail = mysqli_escape_string($conn, $_POST['email']);
     $userpassword = $_POST['password'];
     $hashedPassword = password_hash($userpassword, PASSWORD_DEFAULT);
 
@@ -24,8 +26,11 @@ if ($_POST) {
             $validate = $conn->query("SELECT * FROM users WHERE email = '$usermail' AND password = '$userpassword'");
 
             if ($validate->num_rows == 1) {
+                $user = $validate->fetch_assoc();
                 $_SESSION['user'] = $usermail;
                 $_SESSION['usertype'] = 'u';
+                $_SESSION['student_id'] = $user['id'];
+                $_SESSION['username'] = $user['name'];
 
                 header('location: users/index.php');
             } else {
@@ -57,12 +62,59 @@ if ($_POST) {
     <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/assets/css/login.css">
     <title>Login</title>
-    
+    <style>
+        body {
+            background-image: url('maharlika/2nd pic.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+
+        #clock {
+            font-size: 2.5rem;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-container {
+            max-width: 350px;
+            margin: 20vh auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Semi-transparent */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+
+        /* Optional: For the clock */
+        #clock {
+            font-size: 1.6rem;
+            color: #333;
+        }
+    </style>
+
 </head>
 
 <body>
     <div class="login-container">
-        <h2 class="text-center">Login</h2>
+        <div id="clock" class="text-center"></div>
+        <h2 class="text-center">LOGIN</h2>
         <form action="" method="POST">
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
@@ -70,19 +122,14 @@ if ($_POST) {
             </div>
             <div class="input-group">
                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                <input type="password" name="password" id="password" class="form-control" placeholder="password" required>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
             </div>
             <div>
                 <input type="submit" class="btn btn-primary mt-3 form-control" value="Login">
             </div>
-            <?php if (isset($error)) {
-            ?>
-                <p style="color: #8E0D0D; font-size: 14px;" class="text-center"><?= $error ?></p>
-            <?php
-            }
-            ?>
         </form>
     </div>
+    <script src="public/assets/js/realtimeclock.js"></script>
 </body>
 
-</html> 
+</html>
