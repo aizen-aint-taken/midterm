@@ -1,37 +1,61 @@
 <?php
 session_start();
-// git test
 require_once '../config/conn.php';
+
 
 if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     header('location: ../index.php');
     exit;
 }
 
-if ($_POST) {
-    $email_result = $conn->query("select * from webuser");
+$error = '';
+$success = '';
 
+
+if ($_POST) {
+    var_dump($$_POST);
     $name = mysqli_real_escape_string($conn, $_POST["name"]);
     $age = mysqli_real_escape_string($conn, $_POST['age']);
     $year = mysqli_real_escape_string($conn, $_POST['year']);
     $sect = mysqli_real_escape_string($conn, $_POST['sect']);
     $email = filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL);
     $pass = $_POST['password'];
-    // $hasspass = password_hash($pass, PASSWORD_BCRYPT);
+    $password = password_hash($pass, PASSWORD_DEFAULT);
 
-    $email_result = $conn->query("select * from webuser where email='$email';");
-    if ($email_result->num_rows == 1) {
-        $error = "Already have an account for this Email address.";
+    if ($email === false) {
+        $error = "Invalid email format.";
     } else {
-        $conn->query("INSERT INTO users(email, password, name, age, year, sect) VALUES ('$email','$pass','$name','$age','$year','$sect')");
-        $conn->query("INSERT INTO webuser(email, usertype) VALUES ('$email','u')");
+        $stmt = $conn->prepare("SELECT * FROM webuser WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $email_result = $stmt->get_result();
 
-        $_SESSION['user'] = $email;
-        $_SESSION['usertype'] = "u";
+        if ($email_result->num_rows == 1) {
+            $error = "Already have an account for this Email address.";
+        } else {
+            // Insert new user and webuser record
+            $stmt = $conn->prepare("INSERT INTO users (email, password, name, age, year, sect) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssss", $email, $password, $name, $age, $year, $sect);
+            $stmt->execute();
 
-        $success =  "Account Successfully Created";
+            $stmt = $conn->prepare("INSERT INTO webuser (email, usertype) VALUES (?, 'u')");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+
+            // Redirect to the login page after successful registration
+            header("Location: ../admin/student.php");
+            exit;
+        }
+    }
+
+    if ($stmt->execute()) {
+        $success = "Account Successfully Created";
+    } else {
+        $error = "Error: " . $stmt->error;
     }
 }
+
+
 
 $users = $conn->query("SELECT * FROM `users`");
 
@@ -47,30 +71,34 @@ include('../includes/sidebar.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="UI PAGE">
     <meta name="author" content="Ely Gian Ga">
-    <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/assets/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../public/assets/css/addStudent.css">
     <link rel="stylesheet" href="/public/assets/css/admin_index.css">
     <title>Add Student</title>
+
 </head>
 
 <body>
     <div class="container mt-5 w-50">
+        <h1 class="text-center">Lists of Student Accounts</h1>
+        <hr>
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Students</button>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBookModal">Add Students</button>
         </div>
 
         <!-- Success message -->
-        <?php if (isset($success)): ?>
-            <div class="alert alert-success"><?= $success ?></div>
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
 
         <!-- Error message -->
-        <?php if (isset($error)): ?>
-            <div class="alert alert-danger"><?= $error ?></div>
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
         <!-- Table View -->
-        <div class="table-responsive w-100">
+        <div class="table-responsive w-200 mt-5">
             <table class="table table-striped text-center ">
                 <thead>
                     <tr>
@@ -92,6 +120,7 @@ include('../includes/sidebar.php');
                                 <!-- Delete button -->
                                 <form action="../admin/deleteStudent.php" method="POST" style="display:inline;">
                                     <input type="hidden" name="delete_id" value="<?= $user['id'] ?>">
+
                                     <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this student?');">Delete</button>
                                 </form>
                             </td>
@@ -107,12 +136,12 @@ include('../includes/sidebar.php');
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addBookModalLabel">Add Students</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="../admin/student.php" method="POST">
+                            <h1></h1>
+                            <!-- <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>"> -->
                             <div class="form-group">
                                 <label for="name">Full Name</label>
                                 <input type="text" class="form-control" name="name" id="name" placeholder="Put Your Full Name" required>
@@ -131,7 +160,7 @@ include('../includes/sidebar.php');
                             </div>
                             <div class="form-group">
                                 <label for="mail">Email</label>
-                                <input type="mail" class="form-control" name="mail" id="mail" placeholder="Your Email" required>
+                                <input type="email" class="form-control" name="mail" id="mail" placeholder="Your Email" required>
                             </div>
                             <div class="form-group">
                                 <label for="pass">Password</label>
@@ -143,8 +172,9 @@ include('../includes/sidebar.php');
                 </div>
             </div>
         </div>
-        <?php include('../includes/footer.php'); ?>
+
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
